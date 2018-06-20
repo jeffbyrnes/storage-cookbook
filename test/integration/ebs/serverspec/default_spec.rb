@@ -7,7 +7,7 @@ describe 'LVM Pool' do
         device: '/dev/xvde',
         type: 'ext4',
         options: {
-          rw: true
+          rw: true,
         }
       )
     end

@@ -23,7 +23,7 @@
 # Find all ephemeral block devices and mount them in subdirectories inside /mnt
 
 if Chef::VersionConstraint.new('< 12.0.0').include? Chef::VERSION
-  fail 'This cookbook requires Chef 12'
+  raise 'This cookbook requires Chef 12'
 end
 
 Chef::Log.debug("Storage info: #{node['storage'].inspect}")
@@ -31,7 +31,7 @@ Chef::Log.debug("Storage info: #{node['storage'].inspect}")
 storage = EverTools::Storage.new(node)
 ephemeral_mounts = []
 
-if File.exist?('/proc/mounts') && File.readlines('/proc/mounts').grep(%r{/mnt/dev0}).size.zero?
+if File.exist?('/proc/mounts') && File.readlines('/proc/mounts').grep(%r{/mnt/dev0}).empty?
 
   Chef::Log.info '/mnt/dev0 not already mounted.  Proceeding...'
 
@@ -42,7 +42,7 @@ if File.exist?('/proc/mounts') && File.readlines('/proc/mounts').grep(%r{/mnt/de
 
     Chef::Log.info 'EC2 ephemeral storage detected.'
 
-    fail 'Directory /mnt not empty' if Dir.entries('/mnt') - %w(lost+found . ..) != []
+    raise 'Directory /mnt not empty' if Dir.entries('/mnt') - %w(lost+found . ..) != []
 
     unless storage.mnt_device.nil?
       m = mount '/mnt' do
@@ -86,7 +86,7 @@ else
   mount '/mnt' do
     action :disable
     device '/dev/xvdb'
-    only_if { !node['storage']['ephemeral_mounts'].size.zero? }
+    not_if { node['storage']['ephemeral_mounts'].empty? }
   end
 end
 
@@ -95,7 +95,7 @@ if ephemeral_mounts.any?
   node.normal['storage']['ephemeral_mounts'] = ephemeral_mounts
 
   Chef::Log.info 'Configured these ephemeral mounts: ' +
-    node['storage']['ephemeral_mounts'].join(' ')
+                 node['storage']['ephemeral_mounts'].join(' ')
 else
   Chef::Log.info 'No ephemeral mounts were found'
   node.rm('storage', 'ephemeral_mounts')
