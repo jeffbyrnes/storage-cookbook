@@ -1,7 +1,12 @@
 ---
 driver:
   name: ec2
-  subnet_id: subnet-a792da8f
+  subnet_id: subnet-f1f6acac  # development-public-us-east-1b
+  # TODO: Switch to the below when
+  #       https://github.com/test-kitchen/kitchen-ec2/issues/394 is fixed
+  # subnet_filter:
+  #   tag: 'Name'
+  #   value: 'development-public-us-east-1b'
   iam_profile_name: test-ebs-attachment
   tags:
     Env: test
