@@ -1,17 +1,8 @@
 ---
 driver:
   name: ec2
-  aws_ssh_key_id: <%= ENV['AWS_KEYPAIR_NAME'] %>
-  region: us-east-1
-  security_group_ids:
-    - sg-97e55ef2
   subnet_id: subnet-a792da8f
-  interface: private
   iam_profile_name: test-ebs-attachment
-
-transport:
-  name: sftp
-  ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
 
 provisioner:
   name: chef_zero
