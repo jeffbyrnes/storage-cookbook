@@ -37,5 +37,5 @@ node['storage']['ebs_volumes'].each_with_index do |(name, conf), i|
     device_name conf['device']
   end
 
-  node.set['storage']['ebs_mounts'] = (node['storage']['ebs_mounts'] || []) | [mount_point]
+  node.normal['storage']['ebs_mounts'] = (node['storage']['ebs_mounts'] || []) | [mount_point]
 end

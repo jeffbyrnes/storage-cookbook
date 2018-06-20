@@ -96,7 +96,7 @@ end
 
 # Populate the attribute with whatever we gathered during this convergence.
 if ephemeral_mounts.any?
-  node.set['storage']['ephemeral_mounts'] = ephemeral_mounts
+  node.normal['storage']['ephemeral_mounts'] = ephemeral_mounts
 
   Chef::Log.info 'Configured these ephemeral mounts: ' +
     node['storage']['ephemeral_mounts'].join(' ')

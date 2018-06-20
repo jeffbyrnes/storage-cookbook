@@ -4,7 +4,7 @@ describe 'storage::default' do
   context '/mnt/dev0 is already mounted' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new do |node|
-        node.set['storage'] = {}
+        node.normal['storage'] = {}
         allow(File).to receive(:readlines).and_return(
           ['/dev/xvdb /mnt/dev0 ext3 rw,relatime,data=ordered 0 0\n']
         )
