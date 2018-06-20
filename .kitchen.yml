@@ -3,6 +3,10 @@ driver:
   name: ec2
   subnet_id: subnet-a792da8f
   iam_profile_name: test-ebs-attachment
+  tags:
+    Env: test
+    Type: test
+    Operator: <%= ENV['USER'] %>
 
 provisioner:
   name: chef_zero
