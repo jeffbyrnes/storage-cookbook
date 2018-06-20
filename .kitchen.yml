@@ -36,15 +36,15 @@ suites:
   - name: ebs
     driver:
       tags:
-        Name: et-storage-ebs-test
+        Name: storage-ebs-test
       instance_type: t2.medium
   - name: es
     driver:
       tags:
-        Name: et-storage-es-test
+        Name: storage-es-test
       instance_type: c3.xlarge
   - name: nvme
     driver:
       tags:
-        Name: et-storage-nvme-test
+        Name: storage-nvme-test
       instance_type: i3.large
