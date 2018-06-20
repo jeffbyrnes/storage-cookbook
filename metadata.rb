@@ -1,6 +1,6 @@
 name             'storage'
-maintainer       'EverTrue, Inc.'
-maintainer_email 'eric.herot@evertrue.com'
+maintainer       'Jeff Byrnes'
+maintainer_email 'jeff@darksky.net'
 license          'Apache-2.0'
 description      'Installs/Configures storage'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
