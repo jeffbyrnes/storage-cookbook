@@ -8,6 +8,10 @@ addons:
     - chef-stable-trusty
     packages:
     - chefdk
+env:
+  matrix:
+  - CHEF_VERSION=13
+  - CHEF_VERSION=14
 before_install:
 - openssl aes-256-cbc -K $encrypted_6bddd121d121_key -iv $encrypted_6bddd121d121_iv
   -in secrets.tar.enc -out secrets.tar -d
