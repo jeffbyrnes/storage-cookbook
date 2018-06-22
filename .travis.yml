@@ -24,4 +24,11 @@ before_script:
 - eval "$(chef shell-init bash)"
 - cookstyle --version
 - foodcritic --version
-script: true
+script:
+- chef exec kitchen verify
+- chef exec kitchen destroy
+matrix:
+  include:
+    - script:
+      - chef exec delivery local all
+      env: UNIT_AND_LINT=1
