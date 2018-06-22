@@ -10,5 +10,4 @@ chef_version     '>= 12.11', '< 15.0.0'
 supports 'ubuntu', '>= 12.04'
 
 depends 'ohai'
-depends 'et_fog', '~> 4.0'
 depends 'aws', '~> 4.0'

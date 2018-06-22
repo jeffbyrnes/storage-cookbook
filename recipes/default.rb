@@ -28,7 +28,6 @@ end
 
 Chef::Log.debug("Storage info: #{node['storage'].inspect}")
 
-include_recipe 'et_fog'
 include_recipe 'storage::udev-fix'
 
 

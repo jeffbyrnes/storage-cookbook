@@ -56,14 +56,6 @@ module EverTools
 
     private
 
-    def fog
-      @fog ||= begin
-        require 'fog'
-
-        Fog::Compute::AWS.new(aws_access_key_id: '', aws_secret_access_key: '')
-      end
-    end
-
     def local
       non_root_bds = @node['block_device'].select { |bd, _conf| bd != 'sda' }
       r = non_root_bds.select do |_bd, bd_conf|
