@@ -28,7 +28,7 @@ end
 
 Chef::Log.debug("Storage info: #{node['storage'].inspect}")
 
-storage = EverTools::Storage.new(node)
+storage = StorageCookbook::Storage.new(node)
 ephemeral_mounts = []
 
 if File.exist?('/proc/mounts') && File.readlines('/proc/mounts').grep(%r{/mnt/dev0}).empty?

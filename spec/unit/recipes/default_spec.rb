@@ -11,11 +11,11 @@ describe 'storage::default' do
       end.converge(described_recipe)
     end
 
-    let(:evertools) do
-      double('evertools', dev_names: ['/dev/xvdb', '/dev/xvdc'])
+    let(:storage) do
+      double('storage', dev_names: ['/dev/xvdb', '/dev/xvdc'])
     end
 
-    before { expect(EverTools::Storage).to receive(:new).and_return(evertools) }
+    before { expect(StorageCookbook::Storage).to receive(:new).and_return(storage) }
 
     it 'disables mount /mnt' do
       expect(chef_run).to disable_mount('/mnt')
