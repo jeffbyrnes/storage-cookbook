@@ -17,7 +17,6 @@ provisioner:
   name: chef_zero
   product_name: chef
   product_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
-  log_level: debug
   attributes:
     storage:
       ebs_volumes:
