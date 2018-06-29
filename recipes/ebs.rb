@@ -17,7 +17,9 @@
 # limitations under the License.
 #
 
-unless Storage::Helpers.iam_profile_instance?
+Chef::Recipe.send(:include, Storage::Helpers)
+
+unless iam_profile_instance?
   creds = data_bag_item('secrets', 'aws_credentials')['Storage']
 end
 
