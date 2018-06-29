@@ -29,6 +29,7 @@ before_script:
 - cookstyle --version
 - foodcritic --version
 script:
+- chef exec kitchen converge -c
 - chef exec kitchen verify
 - chef exec kitchen destroy
 matrix:
