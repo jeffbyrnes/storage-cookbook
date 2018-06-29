@@ -25,6 +25,9 @@ provisioner:
           size: 2
           delete_on_termination: true
 
+verifier:
+  name: inspec
+
 platforms:
   - name: ubuntu-16.04
     run_list:
