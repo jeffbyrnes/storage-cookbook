@@ -26,5 +26,14 @@ module Storage
         URI('http://169.254.169.254/2016-09-02/meta-data/iam/')
       ).code.to_i == 200
     end
+
+    # Some instances expose EBS volumes as NVMe block devices
+    # We need to know this, and transform our device to /dev/nvme[0–26]n1 to accommodate
+    # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html
+    def nvme_instance?
+      instance_classes = %w(c5 c5d i3.metal m5 m5d)
+
+      instance_classes.any? { |instance_class| node['ec2']['instance_type'].include?(instance_class) }
+    end
   end
 end

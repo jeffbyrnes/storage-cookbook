@@ -52,3 +52,8 @@ suites:
       tags:
         Name: storage-nvme-test
       instance_type: i3.large
+  - name: nvme-c5d
+    driver:
+      tags:
+        Name: storage-nvme-test
+      instance_type: c5d.large

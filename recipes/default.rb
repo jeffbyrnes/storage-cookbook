@@ -88,6 +88,15 @@ end
 
 # Populate the attribute with whatever we gathered during this convergence.
 if ephemeral_mounts.any?
+  # Check that a supposed ephemeral mount is, in fact, mounted.
+  # If not, remove it from the array before populating the attribute.
+  # This is b/c some AMIs list more ephemeral block devices than are actually present.
+  ephemeral_mounts.each do |mount_point|
+    unless node['filesystem']['by_mountpoint'].keys.include? mount_point
+      ephemeral_mounts.delete mount_point
+    end
+  end
+
   node.normal['storage']['ephemeral_mounts'] = ephemeral_mounts
 
   Chef::Log.info 'Configured these ephemeral mounts: ' +

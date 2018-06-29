@@ -23,21 +23,26 @@ unless iam_profile_instance?
   creds = data_bag_item('secrets', 'aws_credentials')['Storage']
 end
 
-node['storage']['ebs_volumes'].each_with_index do |(name, conf), i|
-  aws_ebs_volume name do
-    conf.each { |key, value| send(key, value) }
-    if creds
-      aws_access_key creds['access_key_id']
-      aws_secret_access_key creds['secret_access_key']
+if nvme_instance?
+  log 'Due to how EC2 supports EBS volumes on some NVMe instances, we cannot mount them at this time.'
+else
+  node['storage']['ebs_volumes'].each_with_index do |(name, conf), i|
+    aws_ebs_volume name do
+      conf.each { |key, value| send(key, value) }
+      if creds
+        aws_access_key creds['access_key_id']
+        aws_secret_access_key creds['secret_access_key']
+      end
+      action %i(create attach)
     end
-    action %i(create attach)
+
+    mount_point = "/mnt/ebs#{i}"
+    device_name = conf['device']
+
+    storage_format_mount mount_point do
+      device_name device_name
+    end
+
+    node.normal['storage']['ebs_mounts'] = (node['storage']['ebs_mounts'] || []) | [mount_point]
   end
-
-  mount_point = "/mnt/ebs#{i}"
-
-  storage_format_mount mount_point do
-    device_name conf['device']
-  end
-
-  node.normal['storage']['ebs_mounts'] = (node['storage']['ebs_mounts'] || []) | [mount_point]
 end
