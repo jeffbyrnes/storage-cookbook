@@ -6,7 +6,7 @@ describe 'storage::default' do
       ChefSpec::ServerRunner.new(platform: 'ubuntu', version: '18.04') do |node|
         node.normal['storage'] = {}
         allow(File).to receive(:readlines).and_return(
-          ['/dev/xvdb /mnt/dev0 ext3 rw,relatime,data=ordered 0 0\n']
+          ['/dev/xvdb /mnt/dev0 ext4 rw,relatime,data=ordered 0 0\n']
         )
       end.converge(described_recipe)
     end
