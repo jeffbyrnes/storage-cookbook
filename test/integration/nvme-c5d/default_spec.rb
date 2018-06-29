@@ -9,6 +9,12 @@ describe mount '/mnt/dev0' do
   its('options') { should eq ['rw', 'relatime', 'data=ordered'] }
 end
 
+describe mount '/mnt/ebs0' do
+  its('device') { should eq '/dev/nvme2n1' }
+  its('type') { should eq 'ext4' }
+  its('options') { should eq ['rw', 'relatime', 'data=ordered'] }
+end
+
 describe mount '/mnt' do
   it { should_not be_mounted }
 end
