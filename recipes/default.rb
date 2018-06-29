@@ -22,10 +22,6 @@
 
 # Find all ephemeral block devices and mount them in subdirectories inside /mnt
 
-if Chef::VersionConstraint.new('< 12.0.0').include? Chef::VERSION
-  raise 'This cookbook requires Chef 12'
-end
-
 Chef::Log.debug("Storage info: #{node['storage'].inspect}")
 
 storage = StorageCookbook::Storage.new(node)
@@ -44,10 +40,10 @@ if File.exist?('/proc/mounts') && File.readlines('/proc/mounts').grep(%r{/mnt/de
 
     raise 'Directory /mnt not empty' if Dir.entries('/mnt') - %w(lost+found . ..) != []
 
-    unless storage.mnt_device.nil?
+    unless node['filesystem']['by_mountpoint']['/mnt'].nil?
       m = mount '/mnt' do
-        fstype storage.mnt_device.last['fs_type']
-        device storage.mnt_device.first
+        fstype node['filesystem']['by_mountpoint']['/mnt']['fs_type']
+        device node['filesystem']['by_mountpoint']['/mnt']['devices'].first
         action :nothing
       end
       m.run_action(:umount)

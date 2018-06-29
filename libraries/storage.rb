@@ -46,10 +46,6 @@ module StorageCookbook
       end
     end
 
-    def mnt_device
-      @node['filesystem'].find { |_k, v| v['mount'] == '/mnt' }
-    end
-
     def initialize(node)
       @node = node
     end
