@@ -13,4 +13,4 @@ issues_url       'https://github.com/darkskyapp/storage-cookbook/issues'
 supports 'ubuntu', '>= 16.04'
 
 depends 'ohai'
-depends 'aws', '~> 4.0'
+depends 'aws', '~> 7.4'
