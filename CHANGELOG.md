@@ -1,5 +1,9 @@
 # storage CHANGELOG
 
+## v7.0.1 (2018-07-03)
+
+* Fix bug with how attributes are populated on first convergences
+
 ## v7.0.0 (2018-07-03)
 
 * Fix issue with resource properties (evertrue/storage-cookbook#12)
