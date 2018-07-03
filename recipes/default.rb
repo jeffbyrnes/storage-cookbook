@@ -86,6 +86,11 @@ else
   end
 end
 
+# Ensure the filesystem attribute is up-to-date
+ohai 'update_filesystem_mountpoints' do
+  action :nothing
+end.run_action(:reload)
+
 # Populate the attribute with whatever we gathered during this convergence.
 if ephemeral_mounts.any?
   # Check that a supposed ephemeral mount is, in fact, mounted.
@@ -107,3 +112,6 @@ else
 end
 
 include_recipe 'storage::ebs' if node['storage']['ebs_volumes']
+
+# Reload Ohai so our attributes are available to other cookbooks
+ohai 'update_ephemeral_mounts'
