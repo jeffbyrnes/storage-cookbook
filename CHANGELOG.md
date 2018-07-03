@@ -1,5 +1,16 @@
 # storage CHANGELOG
 
+## v7.0.0 (2018-07-03)
+
+* Fix issue with resource properties (evertrue/storage-cookbook#12)
+* Add support for various NVMe instances (e.g., `c5d`)
+    - These do not support adding EBS volumes via the attribute + `storage::ebs` recipe, due to how they remap the device path (e.g., from `/dev/xvde` -> `/dev/nvme2n1`)
+* Drop Chef 12 support, update to work under Chef 13 & 14
+* Drop Ubuntu 14.04 support, update for Ubuntu 16.04 & 18.04
+* Drop `storage::udev-fix`; it is non longer necessary
+* Upgrade `aws` cookbook dependency
+* Update unit & integration testing
+
 ## v6.0.0 (2017-03-09)
 
 * Discover NVMe devices when running on EC2
