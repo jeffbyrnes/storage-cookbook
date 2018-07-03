@@ -1,10 +1,29 @@
-module EverTools
+#
+# Cookbook Name:: storage
+# Library:: storage
+#
+# Copyright (C) 2014 EverTrue, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+module StorageCookbook
   class Storage
     def dev_names
       @dev_names ||= begin
         names = []
         if @node['ec2'] &&
-          @node['ec2']['block_device_mapping_ephemeral0']
+           @node['ec2']['block_device_mapping_ephemeral0']
           Chef::Log.debug('Using ec2 storage')
           names = ec2_dev_names
         elsif @node['etc']['passwd']['vagrant']
@@ -14,8 +33,8 @@ module EverTools
           Chef::Log.debug('Chefspec Detected, skipping mounts')
           names = []
         else
-          fail 'Can\'t figure out what kind of node we\'re running on.'
           names = []
+          raise 'Can\'t figure out what kind of node we\'re running on.'
         end
 
         Chef::Log.debug 'Converted ephemeral device names: ' + names.join(', ')
@@ -27,30 +46,18 @@ module EverTools
       end
     end
 
-    def mnt_device
-      @node['filesystem'].find { |_k, v| v['mount'] == '/mnt' }
-    end
-
     def initialize(node)
       @node = node
     end
 
     private
 
-    def fog
-      @fog ||= begin
-        require 'fog'
-
-        Fog::Compute::AWS.new(aws_access_key_id: '', aws_secret_access_key: '')
-      end
-    end
-
     def local
       non_root_bds = @node['block_device'].select { |bd, _conf| bd != 'sda' }
       r = non_root_bds.select do |_bd, bd_conf|
         bd_conf['model'] == 'VBOX HARDDISK'
       end
-      Chef::Log.info('No additional block devices found') if r.size.zero?
+      Chef::Log.info('No additional block devices found') if r.empty?
       r
     end
 
@@ -70,7 +77,7 @@ module EverTools
       r = e_block_devs.map { |_k, v| "/dev/#{v.sub(/^s/, 'xv')}" }
       r += nvme_devices
       return r if r.any?
-      fail "e_block_devs did not parse correctly, no drives found: #{e_block_devs}"
+      raise "e_block_devs did not parse correctly, no drives found: #{e_block_devs}"
     end
 
     def vagrant_dev_names

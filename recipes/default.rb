@@ -4,7 +4,17 @@
 #
 # Copyright (C) 2014 EverTrue, Inc.
 #
-# All rights reserved - Do Not Redistribute
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 #
 
 # This recipe handles the mounting of additional volumes under various
@@ -12,20 +22,12 @@
 
 # Find all ephemeral block devices and mount them in subdirectories inside /mnt
 
-if Chef::VersionConstraint.new('< 12.0.0').include? Chef::VERSION
-  fail 'This cookbook requires Chef 12'
-end
-
 Chef::Log.debug("Storage info: #{node['storage'].inspect}")
 
-include_recipe 'et_fog'
-include_recipe 'storage::udev-fix'
-
-
-storage = EverTools::Storage.new(node)
+storage = StorageCookbook::Storage.new(node)
 ephemeral_mounts = []
 
-if File.exist?('/proc/mounts') && File.readlines('/proc/mounts').grep(%r{/mnt/dev0}).size.zero?
+if File.exist?('/proc/mounts') && File.readlines('/proc/mounts').grep(%r{/mnt/dev0}).empty?
 
   Chef::Log.info '/mnt/dev0 not already mounted.  Proceeding...'
 
@@ -36,12 +38,12 @@ if File.exist?('/proc/mounts') && File.readlines('/proc/mounts').grep(%r{/mnt/de
 
     Chef::Log.info 'EC2 ephemeral storage detected.'
 
-    fail 'Directory /mnt not empty' if Dir.entries('/mnt') - %w(lost+found . ..) != []
+    raise 'Directory /mnt not empty' if Dir.entries('/mnt') - %w(lost+found . ..) != []
 
-    unless storage.mnt_device.nil?
+    unless node['filesystem']['by_mountpoint']['/mnt'].nil?
       m = mount '/mnt' do
-        fstype storage.mnt_device.last['fs_type']
-        device storage.mnt_device.first
+        fstype node['filesystem']['by_mountpoint']['/mnt']['fs_type']
+        device node['filesystem']['by_mountpoint']['/mnt']['devices'].first
         action :nothing
       end
       m.run_action(:umount)
@@ -80,16 +82,25 @@ else
   mount '/mnt' do
     action :disable
     device '/dev/xvdb'
-    only_if { !node['storage']['ephemeral_mounts'].size.zero? }
+    not_if { node['storage']['ephemeral_mounts'].empty? }
   end
 end
 
 # Populate the attribute with whatever we gathered during this convergence.
 if ephemeral_mounts.any?
-  node.set['storage']['ephemeral_mounts'] = ephemeral_mounts
+  # Check that a supposed ephemeral mount is, in fact, mounted.
+  # If not, remove it from the array before populating the attribute.
+  # This is b/c some AMIs list more ephemeral block devices than are actually present.
+  ephemeral_mounts.each do |mount_point|
+    unless node['filesystem']['by_mountpoint'].keys.include? mount_point
+      ephemeral_mounts.delete mount_point
+    end
+  end
+
+  node.normal['storage']['ephemeral_mounts'] = ephemeral_mounts
 
   Chef::Log.info 'Configured these ephemeral mounts: ' +
-    node['storage']['ephemeral_mounts'].join(' ')
+                 node['storage']['ephemeral_mounts'].join(' ')
 else
   Chef::Log.info 'No ephemeral mounts were found'
   node.rm('storage', 'ephemeral_mounts')

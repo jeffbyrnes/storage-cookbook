@@ -1,22 +1,22 @@
 ---
 driver:
   name: ec2
-  require_chef_omnibus: 12.17.44
-  aws_ssh_key_id: <%= ENV['AWS_KEYPAIR_NAME'] %>
-  region: us-east-1
-  security_group_ids:
-    - sg-97e55ef2
-  subnet_id: subnet-a792da8f
-  interface: private
+  subnet_id: subnet-f1f6acac  # development-public-us-east-1b
+  # TODO: Switch to the below when
+  #       https://github.com/test-kitchen/kitchen-ec2/issues/394 is fixed
+  # subnet_filter:
+  #   tag: 'Name'
+  #   value: 'development-public-us-east-1b'
   iam_profile_name: test-ebs-attachment
-
-transport:
-  name: sftp
-  ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
+  tags:
+    Env: test
+    Type: test
+    Operator: <%= ENV['USER'] %>
 
 provisioner:
   name: chef_zero
-  log_level: debug
+  product_name: chef
+  product_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
   attributes:
     storage:
       ebs_volumes:
@@ -25,29 +25,35 @@ provisioner:
           size: 2
           delete_on_termination: true
 
+verifier:
+  name: inspec
+
 platforms:
-  - name: ubuntu-14.04
-    run_list:
-      - recipe[aws::ec2_hints]
-      - recipe[storage::default]
   - name: ubuntu-16.04
     run_list:
-      - recipe[aws::ec2_hints]
+      - recipe[storage::default]
+  - name: ubuntu-18.04
+    run_list:
       - recipe[storage::default]
 
 suites:
   - name: ebs
     driver:
       tags:
-        Name: et-storage-ebs-test
+        Name: storage-ebs-test
       instance_type: t2.medium
   - name: es
     driver:
       tags:
-        Name: et-storage-es-test
+        Name: storage-es-test
       instance_type: c3.xlarge
   - name: nvme
     driver:
       tags:
-        Name: et-storage-nvme-test
+        Name: storage-nvme-test
       instance_type: i3.large
+  - name: nvme-c5d
+    driver:
+      tags:
+        Name: storage-nvme-test
+      instance_type: c5d.large
