@@ -38,7 +38,7 @@ if File.exist?('/proc/mounts') && File.readlines('/proc/mounts').grep(%r{/mnt/de
 
     Chef::Log.info 'EC2 ephemeral storage detected.'
 
-    raise 'Directory /mnt not empty' if Dir.entries('/mnt') - %w(lost+found . ..) != []
+    raise 'Directory /mnt not empty' if Dir.entries('/mnt') - %w(lost+found efs efs-maxio . ..) != []
 
     unless node['filesystem']['by_mountpoint']['/mnt'].nil?
       m = mount '/mnt' do
