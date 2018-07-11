@@ -1,5 +1,9 @@
 # storage CHANGELOG
 
+## v7.0.2 (2018-07-11)
+
+* Add workaround for existing @darkskyapp systems that have EFS mounted to specific paths in `/mnt`
+
 ## v7.0.1 (2018-07-03)
 
 * Fix bug with how attributes are populated on first convergences
