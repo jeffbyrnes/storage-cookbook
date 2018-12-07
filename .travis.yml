@@ -19,7 +19,6 @@ before_install:
 - mv $HOME/.aws/ds_travis_credentials $HOME/.aws/credentials
 - echo 'node_name "darksky"' >> $HOME/.chef/knife.rb
 - echo "client_key '$HOME/.chef/darksky.pem'" >> $HOME/.chef/knife.rb
-- echo 'chef_server_url "https://chef.darksky.net/organizations/darksky"' >> $HOME/.chef/knife.rb
 - chmod 600 $HOME/.chef/knife.rb $HOME/.chef/darksky.pem
 install:
 - berks
