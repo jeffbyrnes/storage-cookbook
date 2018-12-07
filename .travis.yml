@@ -5,7 +5,7 @@ cache:
 addons:
   apt:
     sources:
-    - chef-stable-trusty
+    - chef-current-trusty
     packages:
     - chefdk
 env:
@@ -21,7 +21,6 @@ before_install:
 - echo "client_key '$HOME/.chef/darksky.pem'" >> $HOME/.chef/knife.rb
 - chmod 600 $HOME/.chef/knife.rb $HOME/.chef/darksky.pem
 install:
-- chef gem install kitchen-ec2
 - berks
 before_script:
 - chef --version
