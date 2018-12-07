@@ -83,4 +83,5 @@ e.g.
 
 ## License and Authors
 
-Author:: EverTrue, Inc. (<eric.herot@evertrue.com>)
+Author:: Eric Herot <eric.herot@gmail.com>  
+Jeff Byrnes <thejeffbyrnes@gmail.com>
