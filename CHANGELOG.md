@@ -1,5 +1,9 @@
 # storage CHANGELOG
 
+## v8.0.0 (2019-01-03)
+
+* Upgrade to [`aws` v8.x](https://github.com/chef-cookbooks/aws/blob/master/CHANGELOG.md#800-2018-12-14) to avoid Ruby gem depsolving slowness (chef-cookbooks/aws#365, darkskyapp/infrastructure#383)
+
 ## v7.0.2 (2018-07-11)
 
 * Add workaround for existing @darkskyapp systems that have EFS mounted to specific paths in `/mnt`
