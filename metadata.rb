@@ -3,7 +3,6 @@ maintainer       'Jeff Byrnes'
 maintainer_email 'jeff@darksky.net'
 license          'Apache-2.0'
 description      'Installs/Configures storage'
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '8.0.0'
 chef_version     '>= 13.0', '< 15.0.0'
 

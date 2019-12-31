@@ -15,8 +15,8 @@ driver:
 
 provisioner:
   name: chef_zero
-  product_name: chef
   product_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
+  chef_license: accept
   attributes:
     storage:
       ebs_volumes:
@@ -27,6 +27,9 @@ provisioner:
 
 verifier:
   name: inspec
+  reporter:
+    - cli
+    - junit:test-results/acceptance/results.xml
 
 platforms:
   - name: ubuntu-16.04
