@@ -102,7 +102,9 @@ if ephemeral_mounts.any?
     end
   end
 
+  # rubocop:disable ChefCorrectness/NodeNormal
   node.normal['storage']['ephemeral_mounts'] = ephemeral_mounts
+  # rubocop:enable ChefCorrectness/NodeNormal
 
   Chef::Log.info 'Configured these ephemeral mounts: ' +
                  node['storage']['ephemeral_mounts'].join(' ')

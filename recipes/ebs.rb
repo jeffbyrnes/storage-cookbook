@@ -43,6 +43,8 @@ else
       device_name device_name
     end
 
+    # rubocop:disable ChefCorrectness/NodeNormal
     node.normal['storage']['ebs_mounts'] = (node['storage']['ebs_mounts'] || []) | [mount_point]
+    # rubocop:enable ChefCorrectness/NodeNormal
   end
 end
