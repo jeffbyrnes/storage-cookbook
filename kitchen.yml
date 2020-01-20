@@ -26,7 +26,7 @@ verifier:
   name: inspec
   reporter:
     - cli
-    - junit:test-results/acceptance/results.xml
+    - junit:test-results/acceptance/%{platform}_%{suite}_results.xml
 
 platforms:
   - name: ubuntu-16.04
