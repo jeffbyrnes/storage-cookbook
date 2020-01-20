@@ -31,7 +31,37 @@ module Storage
     # We need to know this, and transform our device to /dev/nvme[0–26]n1 to accommodate
     # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html
     def nvme_instance?
-      instance_classes = %w(c5 c5d i3.metal m5 m5d)
+      instance_classes = %w(
+        a1
+        c5
+        c5d
+        c5n
+        g4
+        i3.metal
+        i3en
+        inf1
+        m5
+        m5a
+        m5ad
+        m5d
+        m5dn
+        m5n
+        p3dn.24xlarge
+        r5
+        r5a
+        r5ad
+        r5d
+        r5dn
+        r5n
+        t3
+        t3a
+        u-12tb1.metal
+        u-18tb1.metal
+        u-24tb1.metal
+        u-6tb1.metal
+        u-9tb1.metal
+        z1d
+      )
 
       instance_classes.any? { |instance_class| node['ec2']['instance_type'].include?(instance_class) }
     end
