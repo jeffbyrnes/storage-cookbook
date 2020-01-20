@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: storage
+# Cookbook:: storage
 # Recipe:: default
 #
-# Copyright (C) 2014 EverTrue, Inc.
+# Copyright:: (C) 2014 EverTrue, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,14 +28,10 @@ storage = StorageCookbook::Storage.new(node)
 ephemeral_mounts = []
 
 if File.exist?('/proc/mounts') && File.readlines('/proc/mounts').grep(%r{/mnt/dev0}).empty?
+  Chef::Log.info '/mnt/dev0 not already mounted. Proceeding...'
 
-  Chef::Log.info '/mnt/dev0 not already mounted.  Proceeding...'
-
-  if node['ec2'] &&
-     node['ec2']['block_device_mapping_ephemeral0']
-
+  if node['ec2'] && node['ec2']['block_device_mapping_ephemeral0']
     # Unmount anything we find mounted at '/mnt' (as long as it's empty)
-
     Chef::Log.info 'EC2 ephemeral storage detected.'
 
     raise 'Directory /mnt not empty' if Dir.entries('/mnt') - %w(lost+found efs efs-maxio . ..) != []
@@ -54,7 +50,6 @@ if File.exist?('/proc/mounts') && File.readlines('/proc/mounts').grep(%r{/mnt/de
   if storage.dev_names.any?
     # This function formats newly discovered devices, mounts them, then stores
     # their name in our collector array ("ephemeral_mounts").
-
     Chef::Log.info 'Usable storage devices discovered.'
     Chef::Log.debug "Storage devices: #{storage.dev_names.inspect}"
 
@@ -72,10 +67,8 @@ if File.exist?('/proc/mounts') && File.readlines('/proc/mounts').grep(%r{/mnt/de
 else
   # If we find /mnt/dev0 already mounted (which implies that this recipe has
   # already been run), just make sure the attribute gets populated.
-
   Chef::Log.info '/mnt/dev0 already mounted.'
-  ephemeral_mounts =
-    storage.dev_names.each_with_index.map { |_dev_name, i| "/mnt/dev#{i}" }
+  ephemeral_mounts = storage.dev_names.each_with_index.map { |_dev_name, i| "/mnt/dev#{i}" }
 
   # Shipped with Chef 12.0.0
   # https://github.com/chef/chef/pull/1719
@@ -102,10 +95,11 @@ if ephemeral_mounts.any?
     end
   end
 
+  # rubocop:disable ChefCorrectness/NodeNormal
   node.normal['storage']['ephemeral_mounts'] = ephemeral_mounts
+  # rubocop:enable ChefCorrectness/NodeNormal
 
-  Chef::Log.info 'Configured these ephemeral mounts: ' +
-                 node['storage']['ephemeral_mounts'].join(' ')
+  Chef::Log.info "Configured these ephemeral mounts: #{node['storage']['ephemeral_mounts'].join(' ')}"
 else
   Chef::Log.info 'No ephemeral mounts were found'
   node.rm('storage', 'ephemeral_mounts')

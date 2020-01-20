@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: storage
+# Cookbook:: storage
 # Library:: storage
 #
-# Copyright (C) 2014 EverTrue, Inc.
+# Copyright:: (C) 2014 EverTrue, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,12 +29,7 @@ module StorageCookbook
         elsif @node['etc']['passwd']['vagrant']
           Chef::Log.debug('Using vagrant storage')
           names = vagrant_dev_names
-        elsif defined?(ChefSpec)
-          Chef::Log.debug('Chefspec Detected, skipping mounts')
-          names = []
-        else
-          names = []
-          raise 'Can\'t figure out what kind of node we\'re running on.'
+
         end
 
         Chef::Log.debug 'Converted ephemeral device names: ' + names.join(', ')

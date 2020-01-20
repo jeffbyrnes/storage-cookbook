@@ -1,12 +1,9 @@
 ---
 driver:
   name: ec2
-  subnet_id: subnet-f1f6acac  # development-public-us-east-1b
-  # TODO: Switch to the below when
-  #       https://github.com/test-kitchen/kitchen-ec2/issues/394 is fixed
-  # subnet_filter:
-  #   tag: 'Name'
-  #   value: 'development-public-us-east-1b'
+  subnet_filter:
+    tag: 'Name'
+    value: 'public-aws-jb-1d'
   iam_profile_name: test-ebs-attachment
   tags:
     Env: test
@@ -15,8 +12,8 @@ driver:
 
 provisioner:
   name: chef_zero
-  product_name: chef
   product_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
+  chef_license: accept
   attributes:
     storage:
       ebs_volumes:
@@ -27,6 +24,9 @@ provisioner:
 
 verifier:
   name: inspec
+  reporter:
+    - cli
+    - junit:test-results/acceptance/%{platform}_%{suite}_results.xml
 
 platforms:
   - name: ubuntu-16.04
