@@ -1,5 +1,11 @@
 # storage CHANGELOG
 
+## v8.1.0 (2020-01-19)
+
+* Update various elements per current Chef 15 code generator cookbook
+* Test using Chef 15
+* Update NVMe caveats
+
 ## v8.0.0 (2019-01-03)
 
 * Upgrade to [`aws` v8.x](https://github.com/chef-cookbooks/aws/blob/master/CHANGELOG.md#800-2018-12-14) to avoid Ruby gem depsolving slowness (chef-cookbooks/aws#365, darkskyapp/infrastructure#383)
