@@ -1,8 +1,7 @@
 # storage-cookbook
 
 [![Cookbook Version](https://img.shields.io/cookbook/v/storage.svg?style=flat)](https://supermarket.getchef.com/cookbooks/storage)
-[![Build Status](http://img.shields.io/travis/darkskyapp/storage-cookbook.svg?style=flat)](https://travis-ci.org/darkskyapp/storage-cookbook)
-[![Coverage Status](http://img.shields.io/coveralls/darkskyapp/storage-cookbook.svg?style=flat)](https://coveralls.io/r/darkskyapp/storage-cookbook)
+[![Built Status](https://circleci.com/git/jeffbyrnes/storage.svg?style=svg)](https://circleci.com/gh/jeffbyrnes/storage-cookbook/21)
 
 A cookbook for mounting all available EC2 ephemeral volumes and saving their
 respective mount points into node attributes.
