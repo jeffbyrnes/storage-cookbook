@@ -45,7 +45,10 @@ jobs:
               sudo bash -s -- -c stable -P chef-workstation
       - run:
           name: Acceptance
-          command: chef exec delivery local acceptance; chef exec delivery local cleanup
+          command: chef exec delivery local acceptance
+      - run:
+          name: Cleanup
+          command: chef exec delivery local cleanup
       - store_test_results:
           path: test-results
       - store_artifacts:
