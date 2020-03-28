@@ -49,6 +49,7 @@ jobs:
       - run:
           name: Cleanup
           command: chef exec delivery local cleanup
+          when: always
       - store_test_results:
           path: test-results
       - store_artifacts:
